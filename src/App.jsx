@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import LandingView from './components/LandingView';
 import BuilderView from './components/BuilderView';
 import WorkspaceView from './components/WorkspaceView';
@@ -322,6 +323,7 @@ export default function App() {
           </div>
         </div>
       )}
+      <Analytics />
     </>
   );
 }
