@@ -8,6 +8,7 @@ export default function BuilderView({
 }) {
   const [name, setName] = useState('');
   const [idea, setIdea] = useState('');
+  const [targetCustomer, setTargetCustomer] = useState('');
   const [stage, setStage] = useState('Idea');
   const [teamSize, setTeamSize] = useState('Solo Founder');
   const [timeline, setTimeline] = useState('3 Months');
@@ -15,8 +16,8 @@ export default function BuilderView({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name.trim() || !idea.trim()) return;
-    onSubmit({ name, idea, stage, teamSize, timeline });
+    if (!name.trim() || !idea.trim() || !targetCustomer.trim()) return;
+    onSubmit({ name, idea, targetCustomer, stage, teamSize, timeline });
   };
 
   const handleAnswerChange = (q, val) => {
@@ -111,6 +112,22 @@ export default function BuilderView({
                   onChange={(e) => setIdea(e.target.value)}
                   required
                 ></textarea>
+              </div>
+
+              {/* Target Customer */}
+              <div className="form-group">
+                <label htmlFor="input-target-customer" className="form-label">
+                  Target Customer
+                </label>
+                <input
+                  type="text"
+                  id="input-target-customer"
+                  className="form-input"
+                  placeholder="e.g., Pet owners, B2B sales teams, students"
+                  value={targetCustomer}
+                  onChange={(e) => setTargetCustomer(e.target.value)}
+                  required
+                />
               </div>
 
               {/* Current Stage */}

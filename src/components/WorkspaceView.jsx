@@ -356,6 +356,30 @@ export default function WorkspaceView({ startupData, onNavigateToLanding, groqAp
                   </div>
                 </div>
               </div>
+
+              {/* AI Co-Founder Recommendations */}
+              <div className="workspace-section-header" style={{ marginTop: '40px' }}>
+                <h3 className="workspace-section-title">AI Co-Founder Recommendations</h3>
+                <p className="workspace-section-subtitle">
+                  Tailored tactical guidelines for targeting your customer cohort: <strong>{startupData.targetCustomer}</strong>
+                </p>
+              </div>
+
+              <div className="card">
+                <div className="recommendations-container">
+                  {startupData.recommendations && startupData.recommendations.map((rec, idx) => (
+                    <div className="recommendation-card-item" key={idx}>
+                      <div className="recommendation-badge-num">{idx + 1}</div>
+                      <p className="recommendation-text-content">{rec}</p>
+                    </div>
+                  ))}
+                  {(!startupData.recommendations || startupData.recommendations.length === 0) && (
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: 0 }}>
+                      No recommendations generated yet. Define your startup parameters to begin.
+                    </p>
+                  )}
+                </div>
+              </div>
             </section>
           )}
 

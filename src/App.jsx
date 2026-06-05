@@ -14,6 +14,7 @@ export default function App() {
   const [startupData, setStartupData] = useState({
     name: "",
     idea: "",
+    targetCustomer: "",
     stage: "Idea",
     teamSize: "Solo Founder",
     timeline: "3 Months",
@@ -26,7 +27,8 @@ export default function App() {
     },
     competitors: [],
     roadmap: [],
-    tasks: []
+    tasks: [],
+    recommendations: []
   });
 
   // Helper function to query the Groq Chat Completion API
@@ -76,7 +78,7 @@ export default function App() {
         "clarifyingQuestions": ["Question 1", "Question 2"]
       }`;
 
-      const analysisResult = await queryGroq(analysisPrompt, `Startup Name: ${formData.name}\nStartup Concept: ${formData.idea}`);
+      const analysisResult = await queryGroq(analysisPrompt, `Startup Name: ${formData.name}\nStartup Concept: ${formData.idea}\nTarget Customer: ${formData.targetCustomer}`);
       
       const questions = analysisResult.clarifyingQuestions || [];
 
@@ -106,6 +108,7 @@ export default function App() {
       Current Stage: ${formData.stage}
       Target Timeline: ${formData.timeline}
       Team Size: ${formData.teamSize}
+      Target Customer: ${formData.targetCustomer}
       Startup Idea: ${formData.idea}
       ${clarificationsText ? `\nClarifying Details Provided:\n${clarificationsText}` : ""}
     `;
@@ -144,9 +147,15 @@ export default function App() {
         "retention": 25,
         "growth": 15,
         "velocity": 80
-      }
+      },
+      "recommendations": [
+        "First specific tactical recommendation tailored to their concept and target customer...",
+        "Second specific tactical recommendation tailored to their concept and target customer...",
+        "Third specific tactical recommendation tailored to their concept and target customer..."
+      ]
     }
-    Fill out all fields with high quality, specific content. Ensure all tasks are actionable.`;
+    Fill out all fields with high quality, specific content. Ensure all tasks and recommendations are highly actionable.
+    CRITICAL: The values inside the "metrics" object (users, revenue, retention, growth, velocity) MUST be integers between 0 and 100 representing percentage health scores (NOT raw values like $10,000 or 5,000 users).`;
 
     try {
       const generatedPlan = await queryGroq(systemPrompt, userPrompt);
@@ -164,7 +173,8 @@ export default function App() {
               metrics: generatedPlan.metrics || { users: 15, revenue: 5, retention: 25, growth: 15, velocity: 80 },
               competitors: generatedPlan.competitors || [],
               roadmap: generatedPlan.roadmap || [],
-              tasks: generatedPlan.tasks || []
+              tasks: generatedPlan.tasks || [],
+              recommendations: generatedPlan.recommendations || []
             });
 
             // Transition
@@ -217,12 +227,19 @@ export default function App() {
       { id: "t7", title: `Integrate analytics tracking code to trace landing page conversions`, status: "todo", priority: "Medium" }
     ];
 
+    const defaultRecommendations = [
+      `Validate the core value proposition of ${formData.name} by interviewing 10 potential customers within your target audience.`,
+      `Design an MVP focusing strictly on the single most painful problem of your Target Customer: ${formData.targetCustomer || "your niche market"}.`,
+      `Establish a landing page with a clear CTA to capture emails and measure conversion interest before writing complex code or manufacturing.`
+    ];
+
     setStartupData({
       ...formData,
       metrics: { users: 20, revenue: 5, retention: 30, growth: 15, velocity: 80 },
       competitors: defaultCompetitors,
       roadmap: defaultRoadmap,
-      tasks: defaultTasks
+      tasks: defaultTasks,
+      recommendations: defaultRecommendations
     });
 
     setLoaderStep(0);
